@@ -99,6 +99,14 @@ namespace Playnite.FullscreenApp.Controls.Views
 
                 BindingOperations.SetBinding(ImageCover, Image.SourceProperty, sourceBinding);
             }
+
+            ControlTemplateTools.InitializePluginControls(
+                mainModel.Extensions,
+                Template,
+                this,
+                ApplicationMode.Fullscreen,
+                mainModel,
+                $"{nameof(FullscreenAppViewModel.GameStatusView)}.{nameof(GameStatusViewModel.Game)}.{nameof(GameStatusViewModel.Game.Game)}");
         }
     }
 }
