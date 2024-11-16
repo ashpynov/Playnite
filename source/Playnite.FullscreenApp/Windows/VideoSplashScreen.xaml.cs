@@ -167,7 +167,7 @@ namespace Playnite.FullscreenApp.Windows
 
                 if ( theme?.DirectoryPath is string themeDir && Directory.Exists(themeDir) )
                 {
-                    string video = Directory.GetFiles(themeDir, "IntroVideo.mp4", SearchOption.AllDirectories).FirstOrDefault();
+                    string video = Directory.GetFiles(themeDir, "SplashVideo.mp4", SearchOption.AllDirectories).FirstOrDefault();
                     if ( !String.IsNullOrEmpty(video) ) 
                     {
                         return video;
@@ -183,7 +183,7 @@ namespace Playnite.FullscreenApp.Windows
                             ThemeOptionsSettings themeOptionSettings = Serialization.FromJsonFile<ThemeOptionsSettings>(themeOptionsConfig);
                             if (themeOptionSettings.SelectedPresets.TryGetValue(theme.Id, out List<string> presets))
                             {
-                                var selectedPreset = presets.FirstOrDefault(s => s.ToLower().StartsWith("introvideo."))??"IntroVideo.default";
+                                var selectedPreset = presets.FirstOrDefault(s => s.ToLower().StartsWith("splashvideo."))??"splashVideo.default";
                                 if (!selectedPreset.IsNullOrEmpty() && Directory.GetFiles(themeDir, selectedPreset + ".mp4", SearchOption.AllDirectories).FirstOrDefault() is string selectedVideo )
                                 {
                                     return selectedVideo;
