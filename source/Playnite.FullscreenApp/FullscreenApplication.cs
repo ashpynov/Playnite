@@ -58,7 +58,7 @@ namespace Playnite.FullscreenApp
         public FullscreenApplication(Func<Application> appInitializer, ExtendedSplashScreen splashScreen, CmdLineOptions cmdLine)
             : base(appInitializer, ApplicationMode.Fullscreen, cmdLine)
         {
-            this.splashScreen = splashScreen;            
+            this.splashScreen = splashScreen;
         }
 
         public override void ConfigureViews()
@@ -157,6 +157,9 @@ namespace Playnite.FullscreenApp
 
         private async void OpenMainViewAsync()
         {
+
+            splashScreen?.Close(TimeSpan.FromSeconds(5));
+
             Extensions.LoadPlugins(AppSettings.DisabledPlugins, CmdLine.SafeStartup, AppSettings.DevelExtenions.Where(a => a.Selected == true).Select(a => a.Item).ToList());
             Extensions.LoadScripts(AppSettings.DisabledPlugins, CmdLine.SafeStartup, AppSettings.DevelExtenions.Where(a => a.Selected == true).Select(a => a.Item).ToList());
             OnExtensionsLoaded();
@@ -164,10 +167,10 @@ namespace Playnite.FullscreenApp
             MainModel.OpenView();
             CurrentNative.MainWindow = MainModel.Window.Window;
             CurrentNative.MainWindow.Activate();
-            splashScreen?.Close(new TimeSpan(0));
+            splashScreen?.Close(TimeSpan.FromSeconds(0));
 
             await MainModel.ProcessStartupLibUpdate();
-            
+
             // This is most likely safe place to consider application to be started properly
             FileSystem.DeleteFile(PlaynitePaths.SafeStartupFlagFile);
         }
