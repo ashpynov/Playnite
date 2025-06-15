@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         ShowInTaskbar="False"
         WindowStyle="None"
-        Topmost="True"
+        Topmost="False"
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
         AllowsTransparency="False" Background="Black">
