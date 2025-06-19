@@ -170,7 +170,7 @@ namespace Playnite.FullscreenApp
         private async void OpenMainViewAsync()
         {
 
-            splashScreen?.Close(TimeSpan.FromSeconds(5));
+            splashScreen?.Close(TimeSpan.FromSeconds(20));
 
             Extensions.LoadPlugins(AppSettings.DisabledPlugins, CmdLine.SafeStartup, AppSettings.DevelExtenions.Where(a => a.Selected == true).Select(a => a.Item).ToList());
             Extensions.LoadScripts(AppSettings.DisabledPlugins, CmdLine.SafeStartup, AppSettings.DevelExtenions.Where(a => a.Selected == true).Select(a => a.Item).ToList());

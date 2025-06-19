@@ -126,15 +126,20 @@ namespace Playnite.FullscreenApp.Windows
 
             _splashThread = new Thread(() =>
             {
-                _splashDispatcher = Dispatcher.CurrentDispatcher;
                 _splash = new VideoSplash(_videoSource);
                 _splash.Show();
+
+                _splashDispatcher = Dispatcher.CurrentDispatcher;
                 Dispatcher.Run();
             });
 
             _splashThread.SetApartmentState(ApartmentState.STA);
             _splashThread.IsBackground = true;
             _splashThread.Start();
+            while (_splashDispatcher == null || _splash == null)
+            {
+                Thread.Sleep(10);
+            }
         }
 
         private void CloseVideoSplash(TimeSpan delay)
