@@ -77,13 +77,6 @@ namespace Playnite.FullscreenApp
                 return;
             }
 
-            var cmdLine = new CmdLineOptions();
-            var parsed = Parser.Default.ParseArguments<CmdLineOptions>(Environment.GetCommandLineArgs());
-            if (parsed is Parsed<CmdLineOptions> options)
-            {
-                cmdLine = options.Value;
-            }
-
             ExtendedSplashScreen splash = null;
             var procCount = Process.GetProcesses().Where(a => a.ProcessName.StartsWith("Playnite.")).Count();
             if (cmdLine.Start.IsNullOrEmpty() && !cmdLine.HideSplashScreen && procCount == 1)
