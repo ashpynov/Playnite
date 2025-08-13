@@ -83,6 +83,7 @@ namespace Playnite.FullscreenApp.Windows
         private Dispatcher _splashDispatcher;
         private VideoSplash _splash;
         private SplashScreen _splashScreen;
+        private CancellationTokenSource _delayCancellation = new CancellationTokenSource();
 
         public ExtendedSplashScreen(string splashImage)
         {
@@ -144,14 +145,19 @@ namespace Playnite.FullscreenApp.Windows
             }
             else if (_splashThread != null)
             {
-                Task.Delay(delay).ContinueWith(_ =>
+                _delayCancellation.Cancel();
+                _delayCancellation = new CancellationTokenSource();
+                Task.Delay(delay, _delayCancellation.Token).ContinueWith(t =>
                 {
-                    _splashDispatcher?.Invoke(() =>
+                    if (!t.IsCanceled)
                     {
-                        _splash.CloseSplashScreen();
-                    });
-                    _splashThread.Join();
-                    _splashThread = null;
+                        _splashDispatcher?.Invoke(() =>
+                        {
+                            _splash.CloseSplashScreen();
+                        });
+                        _splashThread.Join();
+                        _splashThread = null;
+                    }
                 });
             }
         }
@@ -168,12 +174,12 @@ namespace Playnite.FullscreenApp.Windows
                 if ( theme?.DirectoryPath is string themeDir && Directory.Exists(themeDir) )
                 {
                     string video = Directory.GetFiles(themeDir, "SplashVideo.mp4", SearchOption.AllDirectories).FirstOrDefault();
-                    if ( !String.IsNullOrEmpty(video) ) 
+                    if ( !String.IsNullOrEmpty(video) )
                     {
                         return video;
                     }
 
-                    // Suport of ThemeOption extension 
+                    // Suport of ThemeOption extension
                     if ( File.Exists(Path.Combine(themeDir,"options.yaml")))
                     {
                         // theme is Option
