@@ -38,6 +38,7 @@ namespace Playnite.Services
 
         public Guid UploadDiagPackage(string diagPath)
         {
+            return Guid.Empty;
             using (var fs = new FileStream(diagPath, FileMode.Open))
             {
                 using (var content = new StreamContent(fs))
