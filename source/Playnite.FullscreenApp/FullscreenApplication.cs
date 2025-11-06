@@ -198,6 +198,7 @@ namespace Playnite.FullscreenApp
 
         public override void Restore()
         {
+            MainModel?.SetViewSizeAndPosition(MainModel.IsFullScreen);
             MainModel?.RestoreWindow();
         }
 
