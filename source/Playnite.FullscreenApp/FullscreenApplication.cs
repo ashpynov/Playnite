@@ -41,7 +41,7 @@ namespace Playnite.FullscreenApp
             }
         }
 
-        private SplashScreen splashScreen;
+        private ExtendedSplashScreen splashScreen;
         private bool sdlInitialized = false;
         private TimeSpan audioSleepTimeout = new TimeSpan(0, 0, 45);
         public static AudioEngine Audio { get; private set; }
@@ -55,7 +55,7 @@ namespace Playnite.FullscreenApp
             get => PlayniteApplication.Current == null ? null : (FullscreenApplication)PlayniteApplication.Current;
         }
 
-        public FullscreenApplication(Func<Application> appInitializer, SplashScreen splashScreen, CmdLineOptions cmdLine)
+        public FullscreenApplication(Func<Application> appInitializer, ExtendedSplashScreen splashScreen, CmdLineOptions cmdLine)
             : base(appInitializer, ApplicationMode.Fullscreen, cmdLine)
         {
             this.splashScreen = splashScreen;
@@ -168,6 +168,9 @@ namespace Playnite.FullscreenApp
 
         private async void OpenMainViewAsync()
         {
+
+            splashScreen?.Close(TimeSpan.FromSeconds(20));
+
             Extensions.LoadPlugins(AppSettings.DisabledPlugins, CmdLine.SafeStartup, AppSettings.DevelExtenions.Where(a => a.Selected == true).Select(a => a.Item).ToList());
             Extensions.LoadScripts(AppSettings.DisabledPlugins, CmdLine.SafeStartup, AppSettings.DevelExtenions.Where(a => a.Selected == true).Select(a => a.Item).ToList());
             OnExtensionsLoaded();
@@ -184,6 +187,9 @@ namespace Playnite.FullscreenApp
             splashScreen?.Close(new TimeSpan(0));
             MainModel.OpenView();
             CurrentNative.MainWindow = MainModel.Window.Window;
+            CurrentNative.MainWindow.Activate();
+            splashScreen?.Close(TimeSpan.FromSeconds(0));
+
             await MainModel.ProcessStartupLibUpdate();
 
             // This is most likely safe place to consider application to be started properly
