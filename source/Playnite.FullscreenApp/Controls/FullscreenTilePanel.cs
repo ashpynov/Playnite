@@ -30,6 +30,11 @@ namespace Playnite.FullscreenApp.Controls
         private int computedColumns;
         private const double marginOffset = 0.5;
 
+        private int visibleColumns => Math.Max((int)Math.Ceiling(viewport.Width / itemWidth), Columns);
+        private int generatedFirstItemIndex = -1;
+        private int generatedLastItemIndex = -1;
+        private Size generatedForSize;
+
         public event EventHandler<InternalChildrenGeneratedArgs> InternalChildrenGenerated;
 
         private void OnInternalChildrenGenerated()
@@ -232,10 +237,12 @@ namespace Playnite.FullscreenApp.Controls
             {
                 return;
             }
-
+            panel.SetVerticalOffset(0);
+            panel.SetHorizontalOffset(0);
             panel.InvalidateMeasure();
             panel.ScrollOwner?.InvalidateScrollInfo();
         }
+
         protected override Size MeasureOverride(Size availableSize)
         {
             if (itemsControl == null)
@@ -243,12 +250,30 @@ namespace Playnite.FullscreenApp.Controls
                 return new Size(0, 0);
             }
 
-            UpdateScrollInfo(availableSize);
-            GetVisibleRange(out var firstItemIndex, out var lastItemIndex);
-            if (lastItemIndex < 0)
+            if (double.IsPositiveInfinity(availableSize.Width) || double.IsPositiveInfinity(availableSize.Height))
             {
-                return new Size(0, 0);
+                return GetExtent();
             }
+            else
+            {
+                return availableSize;
+            }
+        }
+
+        private void GenerateItems(Size forSize)
+        {
+            GetVisibleRange(out var firstItemIndex, out var lastItemIndex);
+
+            if (generatedFirstItemIndex == firstItemIndex
+                && generatedLastItemIndex == lastItemIndex
+                && generatedForSize == viewport)
+            {
+                return;
+            }
+
+            generatedFirstItemIndex = firstItemIndex;
+            generatedLastItemIndex = lastItemIndex;
+            generatedForSize = forSize;
 
             var startPos = generator.GeneratorPositionFromIndex(firstItemIndex);
             var childIndex = (startPos.Offset == 0) ? startPos.Index : startPos.Index + 1;
@@ -293,20 +318,12 @@ namespace Playnite.FullscreenApp.Controls
             {
                 OnInternalChildrenGenerated();
             }
-
-            if (double.IsPositiveInfinity(availableSize.Width) || double.IsPositiveInfinity(availableSize.Height))
-            {
-                return GetExtent();
-            }
-            else
-            {
-                return availableSize;
-            }
         }
 
         protected override Size ArrangeOverride(Size finalSize)
         {
             UpdateScrollInfo(finalSize);
+            GenerateItems(finalSize);
 
             for (int i = 0; i < Children.Count; i++)
             {
@@ -379,7 +396,7 @@ namespace Playnite.FullscreenApp.Controls
                     firstIndex = 0;
                 }
 
-                lastIndex = (previousColumns * computedRows) + (computedRows * (Columns + 1)) - 1;
+                lastIndex = (previousColumns * computedRows) + (computedRows * (visibleColumns + 1)) - 1;
                 if (lastIndex >= itemCount)
                 {
                     lastIndex = itemCount;
@@ -460,7 +477,7 @@ namespace Playnite.FullscreenApp.Controls
 
                 var totalColumns = (int)Math.Ceiling(itemCount / (double)computedRows);
                 return new Size(
-                    (totalColumns * itemWidth) + (centerMargin * 2),
+                    (totalColumns + marginOffset) * itemWidth,
                     viewport.Height);
             }
             else
@@ -542,12 +559,8 @@ namespace Playnite.FullscreenApp.Controls
                 if (itemHeight > viewport.Height)
                 {
                     itemHeight = viewport.Height;
-                    itemWidth = ItemAspectRatio.GetWidth(itemHeight);
                 }
-                else
-                {
-                    itemWidth = GetItemWidth();
-                }
+                itemWidth = ItemAspectRatio.GetWidth(itemHeight);
 
                 computedRows = (int)Math.Floor(viewport.Height / itemHeight);
             }
@@ -768,12 +781,12 @@ namespace Playnite.FullscreenApp.Controls
 
         public void PageLeft()
         {
-            SetHorizontalOffset(HorizontalOffset - (itemWidth * Columns));
+            SetHorizontalOffset(HorizontalOffset - (itemWidth * visibleColumns));
         }
 
         public void PageRight()
         {
-            SetHorizontalOffset(HorizontalOffset + (itemWidth * Columns));
+            SetHorizontalOffset(HorizontalOffset + (itemWidth * visibleColumns));
         }
 
         public void PageUp()
