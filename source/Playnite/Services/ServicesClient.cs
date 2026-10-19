@@ -38,22 +38,7 @@ namespace Playnite.Services
 
         public Guid UploadDiagPackage(string diagPath)
         {
-            using (var fs = new FileStream(diagPath, FileMode.Open))
-            {
-                using (var content = new StreamContent(fs))
-                {
-                    var response = HttpClient.PostAsync(Endpoint + "/playnite/diag", content).GetAwaiter().GetResult();
-                    var strResult = response.Content.ReadAsStringAsync().GetAwaiter().GetResult();
-                    var result = JsonConvert.DeserializeObject<ServicesResponse<Guid>>(strResult);
-                    if (!string.IsNullOrEmpty(result.Error))
-                    {
-                        logger.Error("Service request error by proxy: " + result.Error);
-                        throw new Exception(result.Error);
-                    }
-
-                    return result.Data;
-                }
-            }
+            return Guid.Empty;
         }
 
         public List<AddonManifest> GetAllAddons(AddonType type, string searchTerm)

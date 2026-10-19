@@ -5,8 +5,17 @@
     <AssemblyName>Toolbox</AssemblyName>
     <Copyright>Copyright © Josef Nemec 2026</Copyright>
     <TargetFramework>net462</TargetFramework>
-    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
-    <Platforms>x86</Platforms>
+    <RuntimeIdentifier Condition="'$(Platform)' != 'x64'">win-x86</RuntimeIdentifier>
+    <RuntimeIdentifier Condition="'$(Platform)' == 'x64'">win-x64</RuntimeIdentifier>
+    <Platforms>x86;x64</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugType>portable</DebugType>
+    <OutputPath>..\..\..\..\..\..\..\..\Tools\playnite\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,15 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Copyright>Copyright © Josef Nemec 2026</Copyright>
-    <Version>10.63</Version>
+    <Version>10.63.1</Version>
     <TargetFramework>net462</TargetFramework>
     <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
-    <RuntimeIdentifier>win-x86</RuntimeIdentifier>
-    <Platforms>x86</Platforms>
+    <RuntimeIdentifier Condition="'$(Platform)' != 'x64'">win-x86</RuntimeIdentifier>
+    <RuntimeIdentifier Condition="'$(Platform)' == 'x64'">win-x64</RuntimeIdentifier>
+    <Platforms>x86;x64</Platforms>
     <OutputPath>bin</OutputPath>
     <LangVersion>12</LangVersion>
     <UseWindowsForms>true</UseWindowsForms>
     <UseWpf>true</UseWpf>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+    <DebugType>portable</DebugType>
+    <OutputPath>..\..\..\..\..\..\..\Tools\playnite\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -84,7 +93,8 @@
     <PackageReference Include="Expression.Blend.Sdk" Version="1.0.2" />
     <PackageReference Include="Flurl" Version="2.7.1" />
     <PackageReference Include="LiteDB" Version="4.1.4" />
-    <PackageReference Include="Magick.NET-Q8-x86" Version="14.17.2" />
+    <PackageReference Include="Magick.NET-Q8-x86" Version="14.17.2" Condition="'$(Platform)' != 'x64'" />
+    <PackageReference Include="Magick.NET-Q8-x64" Version="14.17.2" Condition="'$(Platform)' == 'x64'" />
     <PackageReference Include="Magick.NET.Core" Version="14.17.2" />
     <PackageReference Include="Magick.NET.SystemWindowsMedia" Version="8.0.28" />
     <PackageReference Include="Markdig" Version="0.18.0" />

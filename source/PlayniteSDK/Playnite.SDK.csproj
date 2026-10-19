@@ -16,6 +16,13 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DebugType>portable</DebugType>
+    <OutputPath>..\..\..\..\..\..\..\Tools\playnite\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
     <InternalsVisibleTo Include="Playnite.DesktopApp" />
     <InternalsVisibleTo Include="Playnite.FullscreenApp" />

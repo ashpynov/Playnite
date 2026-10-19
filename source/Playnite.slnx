@@ -1,6 +1,7 @@
 <Solution>
   <Configurations>
     <Platform Name="x86" />
+    <Platform Name="x64" />
   </Configurations>
   <Folder Name="/Tests/">
     <Project Path="Tests/Playnite.DesktopApp.Tests/Playnite.DesktopApp.Tests.csproj">
@@ -26,6 +27,7 @@
   <Folder Name="/Tools/">
     <Project Path="Tools/Playnite.Toolbox/Playnite.Toolbox.csproj">
       <Platform Project="x86" />
+      <Platform Solution="*|x64" Project="x64" />
     </Project>
     <Project Path="Tools/Playnite.Utilities/Playnite.Utilities.csproj">
       <Platform Project="x86" />
@@ -34,16 +36,20 @@
   </Folder>
   <Project Path="Playnite.BrowserProcess/Playnite.BrowserProcess.csproj">
     <Platform Project="x86" />
+    <Platform Solution="*|x64" Project="x64" />
   </Project>
   <Project Path="Playnite.Deps/Playnite.Deps.csproj" />
   <Project Path="Playnite.DesktopApp/Playnite.DesktopApp.csproj">
     <Platform Project="x86" />
+    <Platform Solution="*|x64" Project="x64" />
   </Project>
   <Project Path="Playnite.FullscreenApp/Playnite.FullscreenApp.csproj">
     <Platform Project="x86" />
+    <Platform Solution="*|x64" Project="x64" />
   </Project>
   <Project Path="Playnite/Playnite.csproj">
     <Platform Project="x86" />
+    <Platform Solution="*|x64" Project="x64" />
   </Project>
   <Project Path="PlayniteSDK/Playnite.SDK.csproj" />
 </Solution>
